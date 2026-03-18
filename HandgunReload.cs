@@ -1,20 +1,21 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HandgunReload : MonoBehaviour {
+public class Reload: MonoBehaviour
+{
 
     public AudioSource ReloadSound;  //loads sound FX
-    public GameObject CrossObject;  //allows us to turn off the crosshairs on reload
-    public GameObject MechanicsObject;
     public int ClipCount;
     public int ReserveCount;
     public int ReloadAvailable;
-   // public GunShot GunComponent;
+    Animator anim;
+    // public GunShot GunComponent;
 
     void Start()
     {
-     //   GunComponent = GetComponent<GunShot>();
+        //   GunComponent = GetComponent<GunShot>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
@@ -31,7 +32,7 @@ public class HandgunReload : MonoBehaviour {
             ReloadAvailable = 10 - ClipCount; //since our gun only holds 10 shells, we can only load from our reserve minus what's left in the gun
         }
 
-         if (Input.GetButtonDown("Reload")) //if the user presses the reload key
+        if (Input.GetButtonDown("Reload")) //if the user presses the reload key
         {
             if (ReloadAvailable >= 1) //and if we actually have available bullets in reserve...
             {
@@ -48,25 +49,16 @@ public class HandgunReload : MonoBehaviour {
                     ActionReload(); // play the animation and sound and disable firing for a quick sec
                 }
             }
-            StartCoroutine(EnableScripts());
+          
 
         }
     }
 
-    IEnumerator EnableScripts()
-    {
-        yield return new WaitForSeconds(1.1f);  //pause for 1.1 seconds to wait for the reload animation to play
-      //  GunShot.enabled = true; //re-enable the GunShot script
-        CrossObject.SetActive(true); //re-enable the crosshairs
-        MechanicsObject.SetActive(true); //re-enable the gun mechanics
-    }
-
+   
     void ActionReload()
     {
-      //  GunShot.enabled = false; //don't allow firing
-        CrossObject.SetActive(false); //don't display the crosshairs
-        MechanicsObject.SetActive(false); //turn off gun mechanics
+        //  GunShot.enabled = false; //don't allow firing
         ReloadSound.Play(); //play the sound FX
-        GetComponent<Animation>().Play("HandgunReload"); //play the animation of reloading
+        anim.SetTrigger("Reload"); //play the animation of reloading
     }
 }
