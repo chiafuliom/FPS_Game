@@ -1,33 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GunShot : MonoBehaviour {
+public class Gunshot: MonoBehaviour
+{
+    Animator anim;
+    AudioSource audioSource;
 
-    public GameObject flash;
-    // Use this for initialization
-    void Start() {
+    void Start()
+    {
+        anim = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update() {
-        if (GlobalAmmo.LoadedAmmo >=1) {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                flash.SetActive(true);
-                StartCoroutine(MuzzleOff());
-                AudioSource gunsound = GetComponent<AudioSource>();
-                gunsound.Play();
-                GetComponent<Animation>().Play("NewGun");
-                GlobalAmmo.LoadedAmmo -= 1;
-                
-            }
+    void Update()
+    {
+        if (GlobalAmmo.LoadedAmmo >= 1 && Input.GetButtonDown("Fire1"))
+        {
+            audioSource.Play();
+            anim.SetTrigger("Fire");
+            GlobalAmmo.LoadedAmmo--;
         }
     }
-    IEnumerator MuzzleOff()
-    {
-        yield return new WaitForSeconds(0.1f);
-        flash.SetActive(false);
-    }
-    }
+}
 
